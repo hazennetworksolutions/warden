@@ -1,4 +1,4 @@
-<h1 align="center"> Warden Protocol Buenavista v0.3.2 Node Ubuntu Installation with Cosmovisor </h1>
+<h1 align="center"> Warden Protocol Buenavista v0.4.2 Node Ubuntu Installation with Cosmovisor </h1>
 
 * [Warden Website](https://wardenprotocol.org/)<br>
 * [Warden Discord](https://discord.gg/7rzkxXRK)<br>
@@ -10,15 +10,9 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install curl git wget htop tmux build-essential jq make lz4 gcc unzip -y
 ```
 
-### Install Go 1.22.4, the latest version.
+### Install Go 1.23.2, the latest version.
 ```
-wget https://dl.google.com/go/go1.22.4.linux-amd64.tar.gz
-sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf go1.22.4.linux-amd64.tar.gz
-echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.profile
-source ~/.profile
-echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
-source ~/.bashrc
+wget https://go.dev/dl/go1.23.2.linux-amd64.tar.gz && sudo tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz && echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc && source ~/.bashrc && go version
 ```
 
 ###  Download the file, move it to the necessary locations, configure it, and install the Cosmovisor application.
@@ -26,7 +20,7 @@ source ~/.bashrc
 ```
 cd $HOME
 mkdir -p $HOME/.warden/cosmovisor/genesis/bin
-wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.3.2/wardend_Linux_x86_64.zip
+wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.4.2/wardend_Linux_x86_64.zip
 unzip -o wardend_Linux_x86_64.zip
 rm -rf wardend_Linux_x86_64.zip
 chmod +x wardend
@@ -39,7 +33,7 @@ sudo ln -s $HOME/.warden/cosmovisor/genesis $HOME/.warden/cosmovisor/current -f
 sudo ln -s $HOME/.warden/cosmovisor/current/bin/wardend /usr/local/bin/wardend -f
 ```
 ```
-go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.5.0
+go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.6.0
 ```
 
 ### Create the service file
@@ -76,8 +70,7 @@ wardend init "monikername" --chain-id buenavista-1
 
 ### Download the network's genesis file and move it.
 ```
-sudo wget -O /root/genesis.json.tar.xz https://buenavista-genesis.s3.eu-west-1.amazonaws.com/genesis.json.tar.xz && sudo tar -xJf /root/genesis.json.tar.xz -C /root && sudo rm /root/genesis.json.tar.xz /root/genesis.json.tar
-sudo mv /root/genesis.json /root/.warden/config/
+curl -Ls https://snapshots.kjnodes.com/warden-testnet/genesis.json > $HOME/.warden/config/genesis.json
 ```
 
 ### Download the updated addrbook.
@@ -93,7 +86,7 @@ sed -i.bak -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.0025uward\"/;
 ### Set up the seed and peer settings.
 ```
 SEEDS="8288657cb2ba075f600911685670517d18f54f3b@warden-testnet-seed.itrocket.net:18656"
-PEERS="92ba004ac4bcd5afbd46bc494ec906579d1f5c1d@52.30.124.80:26656,ed5781ea586d802b580fdc3515d75026262f4b9d@54.171.21.98:26656"
+PEERS="b14f35c07c1b2e58c4a1c1727c89a5933739eeea@warden-testnet-rpc.itrocket.net:18656,88806b3c6e081b26a5ab6fd0eda11c51e5f31bdf@37.120.189.81:11256,e850365a8232650623f30356c77583939b896327@116.202.217.20:26656"
 sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.warden/config/config.toml
 ```
 
@@ -102,19 +95,6 @@ sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persisten
 sed -i -e "s/^pruning *=.*/pruning = \"custom\"/" $HOME/.warden/config/app.toml
 sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"100\"/" $HOME/.warden/config/app.toml
 sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"50\"/" $HOME/.warden/config/app.toml
-```
-
-### Snapshot.
-```
-sudo systemctl stop wardend
-
-cp $HOME/.warden/data/priv_validator_state.json $HOME/.warden/priv_validator_state.json.backup
-
-rm -rf $HOME/.warden/data $HOME/.warden/wasm
-curl https://server-4.itrocket.net/testnet/warden/warden_2024-08-04_1540384_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.warden
-
-mv $HOME/.warden/priv_validator_state.json.backup $HOME/.warden/data/priv_validator_state.json
-
 ```
 
 ### If you want to change the port to 112XX ports, you can use the following code, it's optional.
