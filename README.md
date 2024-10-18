@@ -10,9 +10,15 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install curl git wget htop tmux build-essential jq make lz4 gcc unzip -y
 ```
 
-### Install Go 1.23.2, the latest version.
+### Install Go 1.22.4, the latest version.
 ```
-wget https://go.dev/dl/go1.23.2.linux-amd64.tar.gz && sudo tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz && echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc && source ~/.bashrc && go version
+wget https://dl.google.com/go/go1.22.4.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go
+sudo tar -C /usr/local -xzf go1.22.4.linux-amd64.tar.gz
+echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.profile
+source ~/.profile
+echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ###  Download the file, move it to the necessary locations, configure it, and install the Cosmovisor application.
