@@ -108,15 +108,12 @@ sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install curl git wget htop tmux build-essential jq make lz4 gcc unzip -y
 
 # User inputs
-read -p "Enter WALLET name: " WALLET
-echo 'export WALLET='$WALLET
 read -p "Enter your MONIKER: " MONIKER
 echo 'export MONIKER='$MONIKER
 read -p "Enter your PORT (2-digit): " PORT
 echo 'export PORT='$PORT
 
 # Setting environment variables
-echo "export WALLET=$WALLET" >> $HOME/.bash_profile
 echo "export MONIKER=$MONIKER" >> $HOME/.bash_profile
 echo "export WARDEN_CHAIN_ID=\"buenavista-1\"" >> $HOME/.bash_profile
 echo "export WARDEN_PORT=$PORT" >> $HOME/.bash_profile
@@ -124,7 +121,6 @@ source $HOME/.bash_profile
 
 printLine
 echo -e "Moniker:        \e[1m\e[32m$MONIKER\e[0m"
-echo -e "Wallet:         \e[1m\e[32m$WALLET\e[0m"
 echo -e "Chain ID:       \e[1m\e[32m$WARDEN_CHAIN_ID\e[0m"
 echo -e "Node custom port:  \e[1m\e[32m$WARDEN_PORT\e[0m"
 printLine
