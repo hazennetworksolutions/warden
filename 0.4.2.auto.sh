@@ -138,11 +138,11 @@ echo $(go version) && sleep 1
 
 # Download Warden protocol binary
 printGreen "3. Downloading Warden binary and setting up..." && sleep 1
-cd $HOME
-rm -rf wardenprotocol
-git clone --depth 1 --branch v0.3.1 https://github.com/warden-protocol/wardenprotocol/
-cd wardenprotocol
-make install
+wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.4.2/wardend_Linux_x86_64.zip
+unzip -o wardend_Linux_x86_64.zip
+rm -rf wardend_Linux_x86_64.zip
+chmod +x wardend
+sudo mv wardend /usr/local/bin
 
 # Create service file
 printGreen "4. Creating service file..." && sleep 1
