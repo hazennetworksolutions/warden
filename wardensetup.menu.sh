@@ -99,11 +99,11 @@ select opt in "${options[@]}"; do
             break
             ;;
         "Exit")
-            printGreen "Exiting the setup. Goodbye!"
+            printGreen "Exiting the setup..."
             exit 0
             ;;
         *) 
-            echo "Invalid option, please try again." 
+            echo -e "${GREEN}Invalid option. Please try again.${NC}" 
             ;;
     esac
 done
