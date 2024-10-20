@@ -211,7 +211,7 @@ sudo systemctl start wardend
 
 # Check node status
 printGreen "10. Checking node status..."
-sudo journalctl -fu wardend
+sudo journalctl -u wardend -f -o cat
 
 # Verify if the node is running
 if systemctl is-active --quiet wardend; then
