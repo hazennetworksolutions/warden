@@ -1,4 +1,4 @@
-<h1 align="center"> Warden Protocol Buenavista v0.4.2 Node Ubuntu Installation with Cosmovisor </h1>
+<h1 align="center"> Warden Protocol Buenavista v0.4.2 Node Ubuntu Installation </h1>
 
 * [Warden Website](https://wardenprotocol.org/)<br>
 * [Warden Discord](https://discord.gg/7rzkxXRK)<br>
