@@ -203,7 +203,7 @@ sed -i.bak -e "s/^seeds = \"\"/seeds = \"$SEEDS\"/" $HOME/.warden/config/config.
 sed -i.bak -e "s/^persistent_peers = \"\"/persistent_peers = \"$PEERS\"/" $HOME/.warden/config/config.toml
 
 # Download the snapshot
-printGreen "11. Downloading snapshot and starting node..." && sleep 1
+printGreen "9. Downloading snapshot and starting node..." && sleep 1
 wardend tendermint unsafe-reset-all --home $HOME/.warden
 if curl -s --head curl https://snapshots.kjnodes.com/warden-testnet/snapshot_latest.tar.lz4 | head -n 1 | grep "200" > /dev/null; then
   curl https://snapshots.kjnodes.com/warden-testnet/snapshot_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.warden
@@ -212,11 +212,11 @@ else
 fi
 
 # Start the node
-printGreen "9. Starting the node..."
+printGreen "10. Starting the node..."
 sudo systemctl start wardend
 
 # Check node status
-printGreen "10. Checking node status..."
+printGreen "11. Checking node status..."
 sudo journalctl -u wardend -f -o cat
 
 # Verify if the node is running
