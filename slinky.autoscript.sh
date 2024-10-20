@@ -202,4 +202,4 @@ sudo systemctl start slinkyd
 # Display instructions to the user
 print_instructions
     
-echo -e "${GREEN} You're Ready! ${NC}"
+echo -e "${GREEN} Slinky Service Installed ${NC}"
