@@ -31,7 +31,7 @@ rm -rf wardend_Linux_x86_64.zip
 chmod +x wardend
 mv wardend $HOME/.warden/cosmovisor/genesis/bin/
 ```
-```
+
 
 ### Create the service file
 ```
