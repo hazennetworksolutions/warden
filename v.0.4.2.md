@@ -24,12 +24,11 @@ source ~/.bashrc
 ###  Download the file, move it to the necessary locations, configure it, and install the Cosmovisor application.
 
 ```
-mkdir -p $HOME/.warden/cosmovisor/genesis/bin
-wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.4.2/wardend_Linux_x86_64.zip
-unzip -o wardend_Linux_x86_64.zip
-rm -rf wardend_Linux_x86_64.zip
-chmod +x wardend
-mv wardend $HOME/.warden/cosmovisor/genesis/bin/
+cd $HOME
+rm -rf wardenprotocol
+git clone --depth 1 --branch v0.3.1 https://github.com/warden-protocol/wardenprotocol/
+cd wardenprotocol
+make install
 ```
 
 
