@@ -1,4 +1,6 @@
 #!/bin/bash
+LOG_FILE="/var/log/warden_node_install.log"
+exec > >(tee -a "$LOG_FILE") 2>&1
 
 printGreen() {
     echo -e "\033[32m$1\033[0m"
@@ -66,17 +68,34 @@ function printNodeLogo {
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------"
+----------------------------------------------------------------------------------------------------
+CoreNode 2024 All rights reserved."
     echo -e "\033[0m"
 }
 
 # Show the node logo
 printNodeLogo
 
+# User confirmation to proceed
+echo -n "Type 'yes' to start the installation Warden Buenavista v0.4.2 and press Enter: "
+read user_input
+
+if [[ "$user_input" != "yes" ]]; then
+  echo "Installation cancelled."
+  exit 1
+fi
+
+# Function to print in green
+printGreen() {
+  echo -e "\033[32m$1\033[0m"
+}
+
+printGreen "Starting installation..."
+
 # Update packages and install dependencies
 printGreen "1. Updating and installing dependencies..."
-sudo apt update && sudo apt upgrade -y
-sudo apt install curl git wget htop tmux build-essential jq make lz4 gcc unzip -y
+sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get install curl git wget htop tmux build-essential jq make lz4 gcc unzip -y
 
 # User inputs
 read -p "Enter WALLET name: " WALLET
@@ -120,11 +139,10 @@ echo $(go version) && sleep 1
 # Download Warden protocol binary
 printGreen "3. Downloading Warden binary and setting up..." && sleep 1
 cd $HOME
-wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.4.2/wardend_Linux_x86_64.zip
-unzip -o wardend_Linux_x86_64.zip
-rm -rf wardend_Linux_x86_64.zip
-chmod +x wardend
-sudo mv wardend /usr/local/bin
+rm -rf wardenprotocol
+git clone --depth 1 --branch v0.3.1 https://github.com/warden-protocol/wardenprotocol/
+cd wardenprotocol
+make install
 
 # Create service file
 printGreen "4. Creating service file..." && sleep 1
@@ -178,6 +196,15 @@ PEERS="b14f35c07c1b2e58c4a1c1727c89a5933739eeea@warden-testnet-rpc.itrocket.net:
 sed -i.bak -e "s/^seeds = \"\"/seeds = \"$SEEDS\"/" $HOME/.warden/config/config.toml
 sed -i.bak -e "s/^persistent_peers = \"\"/persistent_peers = \"$PEERS\"/" $HOME/.warden/config/config.toml
 
+# Download the snapshot
+printGreen "11. Downloading snapshot and starting node..." && sleep 1
+wardend tendermint unsafe-reset-all --home $HOME/.warden
+if curl -s --head curl https://snapshots.kjnodes.com/warden-testnet/snapshot_latest.tar.lz4 | head -n 1 | grep "200" > /dev/null; then
+  curl https://snapshots.kjnodes.com/warden-testnet/snapshot_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.warden
+else
+  echo "No snapshot available"
+fi
+
 # Start the node
 printGreen "9. Starting the node..."
 sudo systemctl start wardend
@@ -185,3 +212,10 @@ sudo systemctl start wardend
 # Check node status
 printGreen "10. Checking node status..."
 sudo journalctl -fu wardend
+
+# Verify if the node is running
+if systemctl is-active --quiet wardend; then
+  echo "The node is running successfully!"
+else
+  echo "The node failed to start, please check the logs."
+fi
