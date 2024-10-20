@@ -91,6 +91,16 @@ printGreen() {
 }
 
 printGreen "Starting installation..."
+sleep 1
+
+printGreen "If there are any, clean up the previous installation files"
+
+sudo systemctl stop wardend
+sudo systemctl disable wardend
+sudo rm -rf /etc/systemd/system/wardend.service
+sudo rm $(which wardend)
+sudo rm -rf $HOME/.warden
+sed -i "/WARDEN_/d" $HOME/.bash_profile
 
 # Update packages and install dependencies
 printGreen "1. Updating and installing dependencies..."
@@ -215,7 +225,7 @@ sudo journalctl -u wardend -f -o cat
 
 # Verify if the node is running
 if systemctl is-active --quiet wardend; then
-  echo "The node is running successfully!"
+  echo "The node is running successfully! Logs can be found at /var/log/warden_node_install.log"
 else
-  echo "The node failed to start, please check the logs."
+  echo "The node failed to start. Logs can be found at /var/log/warden_node_install.log"
 fi
