@@ -185,7 +185,7 @@ wardend init ${MONIKER} --chain-id ${WARDEN_CHAIN_ID}
 # Download genesis and addrbook files
 printGreen "6. Downloading genesis and addrbook..."
 curl -Ls https://snapshots.kjnodes.com/warden-testnet/genesis.json > $HOME/.warden/config/genesis.json
-wget -O $HOME/.warden/config/addrbook.json "https://raw.githubusercontent.com/MictoNode/warden-protocol/main/addrbook.json"
+wget -O $HOME/.warden/config/addrbook.json "https://raw.githubusercontent.com/hazennetworksolutions/warden/refs/heads/main/addrbook.json"
 
 # Configure gas prices and ports
 printGreen "7. Configuring custom ports and gas prices..." && sleep 1
