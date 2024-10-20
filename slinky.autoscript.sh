@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #!/bin/bash
-LOG_FILE="/var/log/warden_node_install.log"
+LOG_FILE="/var/log/slinky_install.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 printGreen() {
@@ -94,11 +94,6 @@ printGreen() {
 
 printGreen "Starting installation..."
 sleep 1
-
-printGreen "If there are any, clean up the previous installation files"
-
-sudo systemctl stop wardend
-sudo systemctl disable wardend
 
 # Color definitions (for colored terminal output)
 GREEN="\e[1m\e[1;32m"
