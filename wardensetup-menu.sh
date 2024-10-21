@@ -90,7 +90,7 @@ select opt in "${options[@]}"; do
     case $opt in
         "Install Warden")
             printGreen "Starting Warden installation..."
-            bash <(curl -s https://raw.githubusercontent.com/hazennetworksolutions/warden/refs/heads/main/0.4.2-autoscript.sh)
+            bash <(curl -s https://raw.githubusercontent.com/hazennetworksolutions/warden/refs/heads/main/wardentest2.sh)
             break
             ;;
         "Install Slinky")
