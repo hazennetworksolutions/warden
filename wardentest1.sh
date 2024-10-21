@@ -202,15 +202,6 @@ PEERS="b14f35c07c1b2e58c4a1c1727c89a5933739eeea@warden-testnet-rpc.itrocket.net:
 sed -i.bak -e "s/^seeds = \"\"/seeds = \"$SEEDS\"/" $HOME/.warden/config/config.toml
 sed -i.bak -e "s/^persistent_peers = \"\"/persistent_peers = \"$PEERS\"/" $HOME/.warden/config/config.toml
 
-# Download the snapshot
-printGreen "9. Downloading snapshot and starting node..." && sleep 1
-wardend tendermint unsafe-reset-all --home $HOME/.warden
-if curl -s --head curl https://snapshots.kjnodes.com/warden-testnet/snapshot_latest.tar.lz4 | head -n 1 | grep "200" > /dev/null; then
-  curl https://snapshots.kjnodes.com/warden-testnet/snapshot_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.warden
-else
-  echo "No snapshot available"
-fi
-
 # Start the node
 printGreen "10. Starting the node..."
 sudo systemctl start wardend
