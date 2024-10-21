@@ -184,7 +184,8 @@ wardend init ${MONIKER} --chain-id ${WARDEN_CHAIN_ID}
 
 # Download genesis and addrbook files
 printGreen "6. Downloading genesis and addrbook..."
-curl -Ls https://snapshots.kjnodes.com/warden-testnet/genesis.json > $HOME/.warden/config/genesis.json
+sudo wget -O /root/genesis.json.tar.xz https://buenavista-genesis.s3.eu-west-1.amazonaws.com/genesis.json.tar.xz && sudo tar -xJf /root/genesis.json.tar.xz -C /root && sudo rm /root/genesis.json.tar.xz
+sudo mv /root/genesis.json /root/.warden/config/
 wget -O $HOME/.warden/config/addrbook.json "https://raw.githubusercontent.com/hazennetworksolutions/warden/refs/heads/main/addrbook.json"
 
 # Configure gas prices and ports
