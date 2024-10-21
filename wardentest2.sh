@@ -184,7 +184,7 @@ wardend init ${MONIKER} --chain-id ${WARDEN_CHAIN_ID}
 
 # Download genesis and addrbook files
 printGreen "6. Downloading genesis and addrbook..."
-curl -Ls https://snapshots.kjnodes.com/warden-testnet/genesis.json > $HOME/.warden/config/genesis.json
+curl -Ls https://snapshots-testnet.nodejumper.io/warden/genesis.json > $HOME/.warden/config/genesis.json
 wget -O $HOME/.warden/config/addrbook.json "https://raw.githubusercontent.com/hazennetworksolutions/warden/refs/heads/main/addrbook.json"
 
 # Configure gas prices and ports
@@ -204,12 +204,10 @@ sed -i.bak -e "s/^persistent_peers = \"\"/persistent_peers = \"$PEERS\"/" $HOME/
 
 # Download the snapshot
 printGreen "9. Downloading snapshot and starting node..." && sleep 1
-wardend tendermint unsafe-reset-all --home $HOME/.warden
-if curl -s --head curl https://snapshots.kjnodes.com/warden-testnet/snapshot_latest.tar.lz4 | head -n 1 | grep "200" > /dev/null; then
-  curl https://snapshots.kjnodes.com/warden-testnet/snapshot_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.warden
-else
-  echo "No snapshot available"
-fi
+
+wardend tendermint unsafe-reset-all --home $HOME/.warden --keep-addr-book
+curl https://snapshots-testnet.nodejumper.io/warden/warden_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.warden
+
 
 # Start the node
 printGreen "10. Starting the node..."
